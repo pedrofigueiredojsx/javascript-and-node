@@ -12,7 +12,7 @@ let player2 = 0;
 
 // adicionando o evento de click aos boxes
 for (let i = 0; i < boxes.length; i++) {
-  // qunado alquem clica na caixa
+  // quando alguem clica na caixa
   boxes[i].addEventListener('click', function () {
 
     let el = checkEl(player1, player2)
@@ -26,14 +26,50 @@ for (let i = 0; i < boxes.length; i++) {
       // computar jogada
       if (player1 == player2) {
         player1++;
+
+        // checa quem venceu após jogada do player 1
+        if (checkWinCondition()) {
+          return;
+        }
+
+        // CORRIGIDO: ai-players em vez de ai-player
+        if (secondPlayer === 'ai-players') {
+          // funcao executar a jogada da IA com delay
+          setTimeout(function () {
+            computerPlay()
+            player2++
+            // checa quem venceu após jogada da IA
+            checkWinCondition()
+          }, 500)
+        }
+
       } else {
         player2++;
+        // checa quem venceu após jogada do player 2
+        checkWinCondition()
       }
 
-      // checa quem venceu
-      checkWinCondition()
-
     }
+  })
+}
+
+// evento para saber se é 2 players ou IA
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener('click', function () {
+
+    secondPlayer = this.getAttribute('id')
+
+    for (let j = 0; j < buttons.length; j++) {
+      buttons[j].style.display = 'none'
+    }
+
+    setTimeout(function () {
+
+      let container = document.querySelector('#container')
+      container.classList.remove('hide')
+
+    }, 500)
+
   })
 }
 
@@ -69,11 +105,11 @@ function checkWinCondition() {
     let b3Child = b3.childNodes[0].className
 
     if (b1Child === 'x' && b2Child === 'x' && b3Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b1Child === 'o' && b2Child === 'o' && b3Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -83,11 +119,11 @@ function checkWinCondition() {
     let b6Child = b6.childNodes[0].className
 
     if (b4Child === 'x' && b5Child === 'x' && b6Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b4Child === 'o' && b5Child === 'o' && b6Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -97,11 +133,11 @@ function checkWinCondition() {
     let b9Child = b9.childNodes[0].className
 
     if (b7Child === 'x' && b8Child === 'x' && b9Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b7Child === 'o' && b8Child === 'o' && b9Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -112,25 +148,11 @@ function checkWinCondition() {
     let b7Child = b7.childNodes[0].className
 
     if (b1Child === 'x' && b4Child === 'x' && b7Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b1Child === 'o' && b4Child === 'o' && b7Child === 'o') {
-      // o
       declareWinner('o')
-    }
-  }
-
-  if (b1.childNodes.length > 0 && b4.childNodes.length > 0 && b7.childNodes.length > 0) {
-    let b1Child = b1.childNodes[0].className
-    let b4Child = b4.childNodes[0].className
-    let b7Child = b7.childNodes[0].className
-
-    if (b1Child === 'x' && b4Child === 'x' && b7Child === 'x') {
-      // x
-      declareWinner('x')
-    } else if (b1Child === 'o' && b4Child === 'o' && b7Child === 'o') {
-      // o
-      declareWinner('o')
+      return true;
     }
   }
 
@@ -140,11 +162,11 @@ function checkWinCondition() {
     let b8Child = b8.childNodes[0].className
 
     if (b2Child === 'x' && b5Child === 'x' && b8Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b2Child === 'o' && b5Child === 'o' && b8Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -154,11 +176,11 @@ function checkWinCondition() {
     let b9Child = b9.childNodes[0].className
 
     if (b3Child === 'x' && b6Child === 'x' && b9Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b3Child === 'o' && b6Child === 'o' && b9Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -170,11 +192,11 @@ function checkWinCondition() {
     let b9Child = b9.childNodes[0].className
 
     if (b1Child === 'x' && b5Child === 'x' && b9Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b1Child === 'o' && b5Child === 'o' && b9Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -184,11 +206,11 @@ function checkWinCondition() {
     let b7Child = b7.childNodes[0].className
 
     if (b3Child === 'x' && b5Child === 'x' && b7Child === 'x') {
-      // x
       declareWinner('x')
+      return true;
     } else if (b3Child === 'o' && b5Child === 'o' && b7Child === 'o') {
-      // o
       declareWinner('o')
+      return true;
     }
   }
 
@@ -203,7 +225,10 @@ function checkWinCondition() {
 
   if (counter == 9) {
     declareWinner('deu velha')
+    return true;
   }
+
+  return false;
 }
 
 // limpa o jogo, declara o vencedor e atualiza o placar
@@ -241,6 +266,36 @@ function declareWinner(winner) {
 
   for (let i = 0; i < boxesToRemove.length; i++) {
     boxesToRemove[i].parentNode.removeChild(boxesToRemove[i])
+  }
+
+}
+
+// executar a lógica da jogada do CPU
+function computerPlay() {
+
+  let cloneO = o.cloneNode(true)
+  counter = 0;
+  filled = 0;
+
+  for (let i = 0; i < boxes.length; i++) {
+
+    let randomNumber = Math.floor(Math.random() * 5)
+
+    // só preencher se estiver vazio o filho
+    if (boxes[i].childNodes[0] == undefined) {
+      if (randomNumber <= 1) {
+        boxes[i].appendChild(cloneO)
+        counter++
+        break
+      }
+    } else {
+      filled++
+    }
+
+  }
+
+  if (counter == 0 && filled < 9) {
+    computerPlay()
   }
 
 }
